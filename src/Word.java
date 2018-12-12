@@ -6,6 +6,7 @@
 //*************************************
 
 import java.util.stream.*;
+import java.util.ArrayList;
 public class Word 
 {
 	private String word;
@@ -36,12 +37,15 @@ public class Word
 		int penalties = 0;
 		int differentLetters = 0;
 		String wordTemp = word;
-		while (wordTemp.length() > 0)
+		ArrayList<Character> list = new ArrayList<Character>();
+		for (int i = 0; i < wordTemp.length(); i++)
 		{
-			wordTemp.replaceAll(""+wordTemp.charAt(0), "");
-			differentLetters++;
+			if (list.contains(wordTemp.charAt(i)) == false);
+			{
+				list.add(wordTemp.charAt(i));
+			}
 		}
-		
+		differentLetters = list.size();
 		if (word.contains("an"))
 		{
 			penalties++;
