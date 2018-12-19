@@ -174,12 +174,7 @@ public class EvilHangman
 				//Convert ArrayList<WordContainer> to ArrayList<Word>
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = largestArrays.get(gen.nextInt(largestArrays.size()));
-				System.out.println("Output: Containter Locations:");
-				for (WordContainer wc: tempList)
-				{
-					Arrays.toString(wc.getLocations().toArray());
-
-				}
+				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
@@ -215,7 +210,7 @@ public class EvilHangman
 
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = subsets.get(0);
-				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray()));
+				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
