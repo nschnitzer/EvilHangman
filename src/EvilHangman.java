@@ -42,6 +42,7 @@ public class EvilHangman
 	//Makes Subsets
 	private ArrayList<ArrayList<WordContainer>> makeSubsets(ArrayList<Word> currentList, char guess)
 	{
+		listOfLists = new ArrayList<ArrayList<WordContainer>>();
 		//Find all possible combinations where there is the element in certain position(s)
 		for (int i = 0; i < words.size(); i++)
 		{
