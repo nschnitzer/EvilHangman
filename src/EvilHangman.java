@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,6 +22,8 @@ public class EvilHangman
 	ArrayList<Word> words = new ArrayList<Word>();
 	Word currentWord = null;
 	final int CHANGE_WORD_LIMIT = 7;
+	final int TURN_LIMIT = 15;
+	int turnsTaken = 0;
 	int changeWordCount = 0;
 	ArrayList<Character> correctGuesses = new ArrayList<Character>();
 
@@ -116,18 +119,25 @@ public class EvilHangman
 			}
 		}
 
+		/*
+		 * Prints out the list of subsets 
 		for (ArrayList<WordContainer> arr : listOfLists)
 		{
 			System.out.println(arr.size() + "\t" + arr.get(0).getLocations().toString());
 		}
+		 */
 
 		return listOfLists;
 	}
 
-	public boolean makeGuess(char guess) throws InvalidGuessException
+	public boolean makeGuess(char guess) throws InvalidGuessException, WinnerException, LoseException
 	{
 		//TODO: Exception checking for invalid input
 		if (Character.isAlphabetic(guess) == false)
+		{
+			throw new InvalidGuessException();
+		}
+		if (Character.isLetter(guess) == false)
 		{
 			throw new InvalidGuessException();
 		}
@@ -135,6 +145,7 @@ public class EvilHangman
 		//If the computer is still changing the word
 		if (changeWordCount < CHANGE_WORD_LIMIT)
 		{
+			changeWordCount++;
 			//get the subsets
 			ArrayList<ArrayList<WordContainer>> subsets = makeSubsets(words, guess);
 
@@ -159,10 +170,16 @@ public class EvilHangman
 			if (largestArrays.size() != 1)
 			{
 				//Use random to pick list to use
-				
+
 				//Convert ArrayList<WordContainer> to ArrayList<Word>
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = largestArrays.get(gen.nextInt(largestArrays.size()));
+				System.out.println("Output: Containter Locations:");
+				for (WordContainer wc: tempList)
+				{
+					Arrays.toString(wc.getLocations().toArray());
+
+				}
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
@@ -179,20 +196,26 @@ public class EvilHangman
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
 					printWord();
+					checkLoser();
+					checkWinner();
 					return true;
 				}
 				else
 				{
 					System.out.println("Incorrect Guess");
 					printWord();
+					checkLoser();
+					checkWinner();
 					return false;
 				}
 
 			}
 			else
 			{
+
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = subsets.get(0);
+				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray()));
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
@@ -206,12 +229,16 @@ public class EvilHangman
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
 					printWord();
+					checkLoser();
+					checkWinner();
 					return true;
 				}
 				else
 				{
 					System.out.println("Incorrect Guess");
 					printWord();
+					checkLoser();
+					checkWinner();
 					return false;
 				}
 			}
@@ -224,18 +251,22 @@ public class EvilHangman
 				System.out.println("Correct Guess");
 				correctGuesses.add(guess);
 				printWord();
+				checkLoser();
+				checkWinner();
 				return true;
 			}
 			else
 			{
 				System.out.println("Incorrect Guess");
 				printWord();
+				checkLoser();
+				checkWinner();
 				return false;
 			}
 		}
 	} //End Method
 
-	
+
 	//Print out the current word
 	private void printWord()
 	{
@@ -252,20 +283,51 @@ public class EvilHangman
 			}
 		}
 	}
-	
+
 	//Checks if the player has guessed the entire word
 	public void checkWinner() throws WinnerException
 	{
 		String w = currentWord.getWord();
 		for (int i = 0; i < w.length(); i++)
 		{
-			//TODO: FINISH
+			if (correctGuesses.indexOf(w.charAt(i)) == -1)
+			{
+				//The player has not won yet as there is a character he has not guessed yet
+				return;
+			}
+		}
+
+		//All characters in the word have been correctly guessed
+		throw new WinnerException();
+	}
+
+	//Checks if the player has run out of turns
+	private void checkLoser() throws LoseException
+	{
+		if (turnsRemaining() == 0)
+		{
+			throw new LoseException("Player has run out of turns");
 		}
 	}
-	
-	//Prep Move
-	public void prepMove(char guess)
+
+	//Increments the turn counter
+	private void incrementTurnCount()
 	{
-		//TODO
+		turnsTaken++;
+	}
+
+	/*
+	 * Not needed*
+	//Decrements the turn counter
+	private void decrementTurnCount()
+	{
+		turnsTaken--;
+	}
+	 */
+
+	//Returns how many turns the player has remaining
+	private int turnsRemaining()
+	{
+		return TURN_LIMIT - turnsTaken;
 	}
 }

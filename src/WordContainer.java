@@ -19,19 +19,23 @@ public class WordContainer
 		locs = locations;
 	}
 	
+	//Returns the word
 	public Word getWord()
 	{
 		return word;
 	}
 	
+	//Returns the locations
 	public ArrayList<Integer> getLocations()
 	{
 		return locs;
 	}
 	
+	//Sets the locations of the element
 	public void setLocations(ArrayList<Integer> locations)
 	{
 		locs = locations;
 	}
+	
 
 }
