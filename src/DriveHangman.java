@@ -18,9 +18,12 @@ public class DriveHangman
 		//Scanner scan = new Scanner(new File("src/inputs.txt"));
 		Scanner scan = new Scanner(System.in);
 		String newGame = "y";
+		final int MAX_TURNS = 15;
+		int turns;
 		
 		while (newGame.equalsIgnoreCase("y"))
 		{
+			turns = 0;
 			EvilHangman hm = new EvilHangman();
 			System.out.println("------------------------------------------------------------");
 			System.out.println("\tWelcome to Evil Hangman");
@@ -43,14 +46,24 @@ public class DriveHangman
 				{
 					hasWon = true;
 					gameOver = true;
+					System.out.println();
+					System.out.println("The word was " + e.getMessage());
+					break;
 				}
 				catch (InvalidGuessException e)
 				{
-					System.out.println("That is an invalid input... ");
+					System.out.println(e.getMessage());
 				}
 				catch (LoseException e)
 				{
 					hasLost = true;
+					gameOver = true;
+				}
+				hm.printOutcome();
+				turns++;
+				if (turns > MAX_TURNS)
+				{
+					hasWon = false;
 					gameOver = true;
 				}
 			}

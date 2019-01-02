@@ -14,7 +14,7 @@ public class Word
 	
 	public Word(String w)
 	{
-		word = w;
+		word = w.toLowerCase();
 		calculateComplexity(w);
 	}
 	

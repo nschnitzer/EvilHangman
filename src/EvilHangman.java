@@ -20,6 +20,7 @@ public class EvilHangman
 	StringTokenizer strTokenizer;
 	ArrayList<ArrayList<WordContainer>> listOfLists = new ArrayList<ArrayList<WordContainer>>();
 	ArrayList<Word> words = new ArrayList<Word>();
+	ArrayList<Character> incorrectGuesses = new ArrayList<Character>();
 	Word currentWord = null;
 	final int CHANGE_WORD_LIMIT = 7;
 	final int TURN_LIMIT = 15;
@@ -136,11 +137,19 @@ public class EvilHangman
 		//TODO: Exception checking for invalid input
 		if (Character.isAlphabetic(guess) == false)
 		{
-			throw new InvalidGuessException();
+			throw new InvalidGuessException("This is not an acceptable input");
 		}
 		if (Character.isLetter(guess) == false)
 		{
-			throw new InvalidGuessException();
+			throw new InvalidGuessException("This is not an acceptable input");
+		}
+		if (incorrectGuesses.contains(guess))
+		{
+			throw new InvalidGuessException("You have already guessed this letter");
+		}
+		if (correctGuesses.contains(guess))
+		{
+			throw new InvalidGuessException("You have already guessed this letter");
 		}
 
 		//If the computer is still changing the word
@@ -175,7 +184,7 @@ public class EvilHangman
 				//Convert ArrayList<WordContainer> to ArrayList<Word>
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = largestArrays.get(gen.nextInt(largestArrays.size()));
-				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
+				//System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
@@ -191,7 +200,6 @@ public class EvilHangman
 				{
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
-					printWord();
 					checkLoser();
 					checkWinner();
 					return true;
@@ -199,7 +207,7 @@ public class EvilHangman
 				else
 				{
 					System.out.println("Incorrect Guess");
-					printWord();
+					incorrectGuesses.add(guess);
 					checkLoser();
 					checkWinner();
 					return false;
@@ -211,7 +219,7 @@ public class EvilHangman
 
 				ArrayList<Word> newList = new ArrayList<Word>();
 				ArrayList<WordContainer> tempList = subsets.get(0);
-				System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
+				//System.out.print(Arrays.toString(tempList.get(0).getLocations().toArray())); //Take out after debug
 				for (WordContainer wc : tempList)
 				{
 					newList.add(wc.getWord());
@@ -224,7 +232,6 @@ public class EvilHangman
 				{
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
-					printWord();
 					checkLoser();
 					checkWinner();
 					return true;
@@ -232,7 +239,7 @@ public class EvilHangman
 				else
 				{
 					System.out.println("Incorrect Guess");
-					printWord();
+					incorrectGuesses.add(guess);
 					checkLoser();
 					checkWinner();
 					return false;
@@ -246,7 +253,6 @@ public class EvilHangman
 			{
 				System.out.println("Correct Guess");
 				correctGuesses.add(guess);
-				printWord();
 				checkLoser();
 				checkWinner();
 				return true;
@@ -254,7 +260,7 @@ public class EvilHangman
 			else
 			{
 				System.out.println("Incorrect Guess");
-				printWord();
+				incorrectGuesses.add(guess);
 				checkLoser();
 				checkWinner();
 				return false;
@@ -264,20 +270,20 @@ public class EvilHangman
 
 
 	//Print out the current word
-	private void printWord()
+	public void printOutcome()
 	{
-		String w = currentWord.getWord();
-		for (int i = 0; i < w.length(); i++)
+		
+		System.out.println();
+		System.out.print("You have already guessed: ");
+		for (Character g : incorrectGuesses)
 		{
-			if (correctGuesses.indexOf(w.charAt(i)) != -1)
-			{
-				System.out.println(w.charAt(i));
-			}
-			else
-			{
-				System.out.println("-");
-			}
+			System.out.print(g + " ");
 		}
+		for (Character g : correctGuesses)
+		{
+			System.out.print(g + " ");
+		}
+		System.out.println();
 	}
 
 	//Checks if the player has guessed the entire word
@@ -294,7 +300,7 @@ public class EvilHangman
 		}
 
 		//All characters in the word have been correctly guessed
-		throw new WinnerException();
+		throw new WinnerException(currentWord.getWord());
 	}
 
 	//Checks if the player has run out of turns
