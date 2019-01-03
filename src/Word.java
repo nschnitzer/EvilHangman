@@ -11,26 +11,40 @@ public class Word
 {
 	private String word;
 	private double complexity;
-	
+
+	/**
+	 * Constructs a Word Object
+	 * 
+	 * @param w the string that the object will contain
+	 */
 	public Word(String w)
 	{
 		word = w.toLowerCase();
-		calculateComplexity(w);
+		//calculateComplexity(w); Obselete
 	}
-	
+
 	//Returns the word
+	/**
+	 * Returns the String the Word object contains
+	 * @return the String object
+	 */
 	public String getWord()
 	{
 		return word;
 	}
-	
+
+	/*
+	 * Obselete
 	//Returns the complexity
 	public double getComplexity()
 	{
 		return complexity;
 	}
-	
+	 */
+
 	//Calculates complexity
+	/*
+	 * Obselete
 	public void calculateComplexity(String word)
 	{
 		int length = word.length();
@@ -50,12 +64,12 @@ public class Word
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("r"))
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("s"))
 		{
 			penalties++;
@@ -64,12 +78,12 @@ public class Word
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("l"))
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("n"))
 		{
 			penalties++;
@@ -79,22 +93,22 @@ public class Word
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("ly"))
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("ce"))
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("ck"))
 		{
 			penalties++;
 		}
-		
+
 		if (word.contains("le"))
 		{
 			penalties++;
@@ -102,6 +116,7 @@ public class Word
 		double score = 0.0;
 		score = (differentLetters + (penalties / length)) / length;
 	}
-	
+	 */
+
 
 }

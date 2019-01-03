@@ -18,7 +18,7 @@ public class DriveHangman
 		//Scanner scan = new Scanner(new File("src/inputs.txt"));
 		Scanner scan = new Scanner(System.in);
 		String newGame = "y";
-		final int MAX_TURNS = 15;
+		final int MAX_TURNS = 26;
 		int turns;
 		
 		while (newGame.equalsIgnoreCase("y"))
@@ -52,18 +52,17 @@ public class DriveHangman
 				}
 				catch (InvalidGuessException e)
 				{
+					if (e.getMessage().equals("You have already guessed this letter"))
+					{
+						turns--;
+					}
 					System.out.println(e.getMessage());
-				}
-				catch (LoseException e)
-				{
-					hasLost = true;
-					gameOver = true;
 				}
 				hm.printOutcome();
 				turns++;
 				if (turns > MAX_TURNS)
 				{
-					hasWon = false;
+					hasLost = true;
 					gameOver = true;
 				}
 			}

@@ -29,6 +29,11 @@ public class EvilHangman
 	ArrayList<Character> correctGuesses = new ArrayList<Character>();
 
 	//Constructs EvilHangman game
+	/**
+	 * Creates an EvilHangman object
+	 * 
+	 * @throws IOException thrown if there is no input or an issue parsing the input
+	 */
 	public EvilHangman() throws IOException
 	{
 		scan = new Scanner(new File("src/words.txt"));
@@ -41,6 +46,13 @@ public class EvilHangman
 	}
 
 	//Makes Subsets
+	/**
+	 * Finds all possible permutations where the guess is located and places all of them into ArrayLists accordingly and then returns an ArrayList of all the ArrayLists
+	 * 
+	 * @param currentList the current word list available
+	 * @param guess the guessed character
+	 * @return ArrayList of all ArrayList subsets
+	 */
 	private ArrayList<ArrayList<WordContainer>> makeSubsets(ArrayList<Word> currentList, char guess)
 	{
 		listOfLists = new ArrayList<ArrayList<WordContainer>>();
@@ -121,20 +133,19 @@ public class EvilHangman
 			}
 		}
 
-		/*
-		 * Prints out the list of subsets 
-		for (ArrayList<WordContainer> arr : listOfLists)
-		{
-			System.out.println(arr.size() + "\t" + arr.get(0).getLocations().toString());
-		}
-		 */
-
 		return listOfLists;
 	}
 
-	public boolean makeGuess(char guess) throws InvalidGuessException, WinnerException, LoseException
+	/**
+	 * Plays a turn by exception checking to handle invalid input, determines if the computer is still cheating and calls the make subset method and makes the word
+	 * a random word in the largest subset if it is. Otherwise, it skips this and checks if the char is in the word
+	 * 
+	 * @param guess the character that the player is guessing
+	 * @throws InvalidGuessException gets thrown if the input is invalid or is already guessed
+	 * @throws WinnerException gets thrown if the player has won
+	 */
+	public void makeGuess(char guess) throws InvalidGuessException, WinnerException
 	{
-		//TODO: Exception checking for invalid input
 		if (Character.isAlphabetic(guess) == false)
 		{
 			throw new InvalidGuessException("This is not an acceptable input");
@@ -200,17 +211,13 @@ public class EvilHangman
 				{
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
-					checkLoser();
 					checkWinner();
-					return true;
 				}
 				else
 				{
 					System.out.println("Incorrect Guess");
 					incorrectGuesses.add(guess);
-					checkLoser();
 					checkWinner();
-					return false;
 				}
 
 			}
@@ -232,17 +239,13 @@ public class EvilHangman
 				{
 					System.out.println("Correct Guess");
 					correctGuesses.add(guess);
-					checkLoser();
 					checkWinner();
-					return true;
 				}
 				else
 				{
 					System.out.println("Incorrect Guess");
 					incorrectGuesses.add(guess);
-					checkLoser();
 					checkWinner();
-					return false;
 				}
 			}
 
@@ -253,23 +256,21 @@ public class EvilHangman
 			{
 				System.out.println("Correct Guess");
 				correctGuesses.add(guess);
-				checkLoser();
 				checkWinner();
-				return true;
 			}
 			else
 			{
 				System.out.println("Incorrect Guess");
 				incorrectGuesses.add(guess);
-				checkLoser();
 				checkWinner();
-				return false;
 			}
 		}
 	} //End Method
 
 
-	//Print out the current word
+	/**
+	 * Prints the letters already guessed
+	 */
 	public void printOutcome()
 	{
 		
@@ -287,6 +288,12 @@ public class EvilHangman
 	}
 
 	//Checks if the player has guessed the entire word
+	/**
+	 * Checks if there is a winner by checking if there is a character in the secret word
+	 * that the player has not guessed
+	 * 
+	 * @throws WinnerException thrown if the player has guessed every letter in the word
+	 */
 	public void checkWinner() throws WinnerException
 	{
 		String w = currentWord.getWord();
@@ -303,33 +310,4 @@ public class EvilHangman
 		throw new WinnerException(currentWord.getWord());
 	}
 
-	//Checks if the player has run out of turns
-	private void checkLoser() throws LoseException
-	{
-		if (turnsRemaining() == 0)
-		{
-			throw new LoseException("Player has run out of turns");
-		}
-	}
-
-	//Increments the turn counter
-	private void incrementTurnCount()
-	{
-		turnsTaken++;
-	}
-
-	/*
-	 * Not needed*
-	//Decrements the turn counter
-	private void decrementTurnCount()
-	{
-		turnsTaken--;
-	}
-	 */
-
-	//Returns how many turns the player has remaining
-	private int turnsRemaining()
-	{
-		return TURN_LIMIT - turnsTaken;
-	}
 }
