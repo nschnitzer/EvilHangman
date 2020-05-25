@@ -42,7 +42,7 @@ public class EvilHangman
 			String word = scan.nextLine();
 			words.add(new Word(word));
 		}
-		makeSubsets(words, 'a');
+		
 	}
 
 	//Makes Subsets
